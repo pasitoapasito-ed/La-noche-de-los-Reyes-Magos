@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>La noche de los Reyes Magos: Actividades Interactivas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&display=swap" rel="stylesheet"> 
+    <style>
+        /*
+        ========================================
+        1. ESTILOS CSS GENERALES Y PALETA DE COLORES
+        ========================================
+        */
+        :root {
+            /* Paleta de colores solicitada */
+            --color-titulo: #f719ae;    /* Rosa Fuerte - Títulos, Énfasis, Botones Principales */
+            --color-acento: #fbac68;    /* Naranja Suave - Acentos, Feedback, Borde */
+            --color-claro: #fdd050;     /* Amarillo Brillo - Fondo Claro, Matches Correctos */
+            --color-texto: #31a4ac;     /* Azul Aguamarina - Texto General, Bordes */
+            --color-fondo-claro: #fcfcfc; 
+            --color-texto-oscuro: #333333;
+            --sombra-boton: 0 4px 6px rgba(0, 0, 0, 0.2);
+            --sombra-opcion: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif; /* Fuente de texto */
+            background-color: var(--color-fondo-claro);
+            color: var(--color-texto-oscuro);
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .contenedor-principal {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-family: 'Caveat', cursive; /* Fuente de título */
+            text-align: center;
+            color: var(--color-titulo);
+            font-size: 3em;
+            margin-bottom: 20px;
+            border-bottom: 3px solid var(--color-claro);
+            padding-bottom: 10px;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-family: 'Caveat', cursive; /* Fuente de título */
+            color: var(--color-texto);
+            font-size: 2.2em;
+            margin-top: 30px;
+            border-left: 5px solid var(--color-acento);
+            padding-left: 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            text-align: justify;
+            color: var(--color-texto-oscuro);
+        }
+        
+        strong {
+            color: var(--color-titulo); 
+            font-weight: 700;
+        }
+
+        /* Estilos para la imagen */
+        .imagen-biografia {
+            display: block;
+            max-width: 45%;
+            height: auto;
+            margin: 20px auto;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 3px solid var(--color-acento);
+        }
+
+        /* Botones de Navegación/Acción - MANTENIDOS EN APARIENCIA GENERAL */
+        .boton {
+            display: block;
+            width: 80%;
+            margin: 40px auto;
+            padding: 15px 30px;
+            font-family: 'Quicksand', sans-serif; /* Aplicar la fuente Quicksand */
+            font-size: 1.3em;
+            font-weight: bold;
+            color: white;
+            background-color: var(--color-titulo); 
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.1s, box-shadow 0.3s;
+            box-shadow: var(--sombra-boton);
+            text-transform: uppercase;
+        }
+
+        .boton:hover {
+            background-color: #d7159c;
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+        
+        .boton:active {
+            transform: scale(0.98);
+        }
+
+        #boton-vocabulario, #iniciar-burbujas-btn {
+            background-color: var(--color-texto); 
+        }
+
+        #boton-vocabulario:hover, #iniciar-burbujas-btn:hover {
+            background-color: #2a888e; 
+        }
+        
+        /* CAMBIO SOLICITADO: Color del botón "Volver a empezar" */
+        #pantalla-final-burbujas .boton {
+            background-color: var(--color-texto); /* #31a4ac */
+        }
+        #pantalla-final-burbujas .boton:hover {
+            background-color: #2a888e; 
+        }
+
+        /*
+        ========================================
+        2. ESTILOS JUEGO CAMINO A LA FAMA (COMPRENSIÓN)
+        ========================================
+        */
+        #lectura-seccion {
+            padding: 20px;
+            border: 2px dashed var(--color-acento);
+            border-radius: 10px;
+        }
+        
+        #juego-seccion, #vocabulario-seccion, #juego-burbujas-seccion {
+            display: none;
+        }
+        
+        /* Medidor de Progreso */
+        .barra-progreso {
+            width: 100%;
+            height: 30px;
+            background-color: #e0e0e0;
+            border-radius: 15px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progreso-relleno {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(to right, var(--color-claro), var(--color-acento), var(--color-titulo));
+            transition: width 0.5s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            box-sizing: border-box;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4);
+        }
+        
+        .pregunta-card {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--color-texto);
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .pregunta-card h3 {
+            color: var(--color-texto);
+            margin-top: 0;
+            font-size: 1.4em;
+            margin-bottom: 15px;
+        }
+
+        /* Restauración de la apariencia de las opciones de respuesta */
+        .opcion-respuesta {
+            display: block;
+            width: 100%; /* Ocupa todo el ancho */
+            margin: 10px 0;
+            padding: 12px;
+            background-color: var(--color-fondo-claro);
+            border: 1px solid var(--color-texto);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s, box-shadow 0.2s;
+            font-size: 1.05em;
+            text-align: left; /* Alineación del texto a la izquierda */
+            box-shadow: var(--sombra-opcion);
+            font-family: 'Quicksand', sans-serif; 
+        }
+
+        .opcion-respuesta:hover:not(.disabled) {
+            background-color: #E6F0F0;
+            border-color: var(--color-acento);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .opcion-respuesta.correcta {
+            background-color: #D3F3E3; 
+            border-color: var(--color-texto);
+            font-weight: bold;
+        }
+
+        .opcion-respuesta.incorrecta {
+            background-color: #FEE7F2; 
+            border-color: var(--color-titulo);
+        }
+
+        .opcion-respuesta.disabled {
+            cursor: default;
+        }
+
+        .feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            font-weight: bold;
+            display: none;
+        }
+
+        .feedback.correcto {
+            background-color: var(--color-texto);
+            color: white;
+        }
+
+        .feedback.incorrecto {
+            background-color: var(--color-titulo);
+            color: white;
+        }
+
+        .boton-siguiente-nivel {
+            display: none; /* De vuelta al comportamiento original */
+            width: 100%;
+            padding: 12px;
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: white;
+            background-color: var(--color-texto);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        /* Pantalla Final del Juego de Comprensión */
+        #pantalla-final-juego {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: var(--color-texto);
+            color: white; /* Color del texto general de la pantalla final */
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        #pantalla-final-juego h2 {
+            color: var(--color-claro);
+            font-size: 3em;
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        /* Estilo para centrar los mensajes de felicitación */
+        .mensaje-centrado {
+            text-align: center;
+        }
+        /* CAMBIO SOLICITADO: Color blanco para "¡Felicidades! Has completado el" */
+        #pantalla-final-juego .mensaje-centrado {
+             color: white; 
+        }
+        #pantalla-final-juego .mensaje-centrado strong {
+             color: var(--color-acento); 
+        }
+
+
+        /*
+        ========================================
+        3. ESTILOS VOCABULARIO (PAIRING)
+        ========================================
+        */
+        #vocabulario-contenedor {
+            display: flex;
+            justify-content: space-around;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .columna-palabras {
+            background-color: #E6F0F0;
+            border: 2px solid var(--color-texto);
+        }
+
+        .columna-definiciones {
+            background-color: #FFF8E6;
+            border: 2px solid var(--color-acento);
+        }
+
+        .item-vocabulario {
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: transform 0.1s, box-shadow 0.2s, background-color 0.2s;
+            user-select: none;
+        }
+
+        .palabra {
+            background-color: var(--color-texto);
+            color: white;
+        }
+
+        .definicion {
+            background-color: var(--color-acento);
+            color: var(--color-texto-oscuro);
+            font-weight: normal;
+        }
+
+        .seleccionado {
+            transform: scale(1.05);
+            box-shadow: 0 0 0 3px var(--color-titulo);
+        }
+
+        .match-correcto {
+            background-color: #31a4ac !important;
+            color: white !important;
+            cursor: default;
+        }
+
+        /* Pantalla Final de Vocabulario */
+        #pantalla-final-vocabulario {
+            text-align: center;
+            padding: 50px 20px;
+            background-color: var(--color-titulo);
+            color: white; 
+            border-radius: 10px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+
+        #pantalla-final-vocabulario h2 {
+            color: var(--color-claro);
+            font-size: 3em;
+            margin-bottom: 20px;
+            border: none;
+        }
+        /* CAMBIO SOLICITADO: Color blanco para texto final */
+        #pantalla-final-vocabulario p {
+            color: white; 
+        }
+        #pantalla-final-vocabulario strong {
+            color: var(--color-claro); 
+        }
+
+        /*
+        ========================================
+        4. ESTILOS JUEGO VERDADERO/FALSO (BURBUJAS)
+        ========================================
+        */
+        #juego-burbujas-seccion {
+            background-color: #f0f8ff;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        #area-juego-burbujas {
+            position: relative;
+            height: 500px;
+            width: 100%;
+            background: linear-gradient(to top, #e0f7fa 0%, var(--color-texto) 10%); 
+            border: 3px solid var(--color-texto);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #barra-info-burbujas {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: var(--color-titulo);
+        }
+
+        .medidor {
+            padding: 5px 10px;
+            border-radius: 5px;
+            background-color: var(--color-fondo-claro);
+            box-shadow: 1px 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        #control-burbuja {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+            padding-bottom: 20px;
+            z-index: 10;
+        }
+
+        .burbuja {
+            position: absolute;
+            width: auto;
+            min-width: 250px;
+            max-width: 80%;
+            padding: 15px 25px;
+            border-radius: 50px;
+            background-color: rgba(255, 255, 255, 0.85);
+            border: 3px solid var(--color-titulo);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+            font-weight: bold;
+            color: var(--color-texto);
+            font-size: 1.1em;
+            transition: opacity 0.3s, transform 0.3s;
+            z-index: 5;
+            top: 550px;
+            display: none;
+        }
+
+        @keyframes flotar {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-550px) scale(1.1); opacity: 0.9; }
+        }
+
+        @keyframes explotar {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.5; }
+            100% { transform: scale(0); opacity: 0; }
+        }
+        
+        .explotando {
+            animation: explotar 0.4s ease-out forwards;
+        }
+
+        #controles-vf {
+            display: flex;
+            gap: 20px;
+            z-index: 20;
+            margin-top: 20px;
+        }
+
+        .boton-vf {
+            padding: 15px 35px;
+            font-size: 1.5em;
+            font-weight: bold;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            box-shadow: 0 4px 0 rgba(0, 0, 0, 0.2);
+            transition: transform 0.1s, background-color 0.2s;
+            font-family: 'Quicksand', sans-serif;
+        }
+        
+        .boton-vf:active {
+            transform: translateY(4px);
+            box-shadow: 0 0 0 rgba(0, 0, 0, 0.2);
+        }
+
+        /* CAMBIO SOLICITADO: Color verde (#00ff00) para el botón VERDADERO */
+        #btn-verdadero {
+            background-color: #00ff00; /* Verde brillante */
+        }
+        /* Ajustar hover para el nuevo color */
+        #btn-verdadero:hover {
+            background-color: #00cc00; /* Un verde un poco más oscuro al pasar el ratón */
+        }
+
+
+        #btn-falso {
+            background-color: var(--color-titulo);
+        }
+
+        #retroalimentacion-vf {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            background-color: rgba(49, 164, 172, 0.9);
+            color: white;
+            border-radius: 8px;
+            font-weight: bold;
+            display: none;
+            z-index: 15;
+            text-align: center;
+            max-width: 80%;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            transition: opacity 0.3s;
+        }
+
+        #combo-display {
+            position: absolute;
+            top: 100px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 4em;
+            color: var(--color-claro);
+            text-shadow: 2px 2px 5px var(--color-titulo);
+            font-weight: 900;
+            opacity: 0;
+            display: none;
+            z-index: 20;
+        }
+
+        @keyframes comboPop {
+            0% { opacity: 0; transform: translate(-50%, 50px) scale(0.5); }
+            50% { opacity: 1; transform: translate(-50%, 0px) scale(1.2); }
+            100% { opacity: 0; transform: translate(-50%, -50px) scale(1); }
+        }
+
+        #pantalla-final-burbujas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(247, 25, 174, 0.95);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-radius: 10px;
+            text-align: center;
+            z-index: 30;
+            display: none;
+        }
+        
+        #pantalla-final-burbujas h2 {
+            color: var(--color-claro);
+            font-size: 3.5em;
+            margin-bottom: 20px;
+            border: none;
+        }
+        
+        /* CAMBIO SOLICITADO: Texto de la pantalla final en blanco */
+        #pantalla-final-burbujas p {
+            color: white;
+            font-size: 1.1em;
+            margin-top: 5px;
+            margin-bottom: 5px;
+        }
+        
+        .puntuacion-final {
+            font-size: 3em;
+            color: var(--color-texto);
+            margin-top: 15px;
+            padding: 10px;
+            background-color: white;
+            border-radius: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+
+    <div class="contenedor-principal">
+        <h1>La noche de los Reyes Magos: Actividades Interactivas</h1>
+
+        <div id="lectura-seccion">
+            <h2>La noche de los Reyes Magos</h2>
+            <audio controls src="https://pasitoapasito-ed.github.io/Biografia-Lionel-Messi/messi.mp3"></audio>
+            
+            <img src="https://github.com/pasitoapasito-ed/Biografia-Lionel-Messi/blob/main/messi-img.png?raw=true" alt="Imagen de La noche de los Reyes Magos" class="imagen-biografia">
+            
+            <h2>La víspera y la Cabalgata de Reyes</h2>
+            <p>Cada año, el cinco de enero, las calles de España se llenan de luces, música y emoción en la <strong>víspera</strong> del Día de Reyes, una de las celebraciones más importantes del año. Los niños esperan con ilusión la llegada de Melchor, Gaspar y Baltasar. Por la tarde, las familias salen a las avenidas para ver la famosa <strong>cabalgata</strong> de Reyes, desde donde grandes carrozas decoradas, los Reyes y sus <strong>pajes</strong> lanzan miles de <strong>caramelos</strong> al aire mientras saludan a todos. Los jóvenes llevan abrigos, bufandas y gorros. A pesar de que enero es un mes muy frío, el ambiente es cálido y alegre.</p>
+
+            <h2>Los zapatos, los regalos y el Roscón de Reyes</h2>
+            <p>Antes de dormir, los niños preparan todo con mucho cuidado: limpian sus zapatos y los dejan cerca del árbol o del balcón. Al lado, ponen agua y un poco de comida para los camellos y los Reyes Magos. Al día siguiente, el seis de enero, todos se despiertan temprano para abrir los regalos que les dejaron los Reyes Magos en sus zapatos. Después, la familia se reúne para desayunar o comer el tradicional Roscón de Reyes, un pan dulce en forma de círculo decorado con frutas cristalizadas que esconde dos sorpresas dentro: una pequeña figura de cerámica o plástico de un Rey Mago o el Niño Jesús. Quien encuentra esta figura en su trozo de roscón es coronado como el "rey" o la "reina" de la fiesta y lleva la corona de cartón que suele venir junto con el pan. La otra sorpresa es una semilla seca, “<strong>el haba</strong>”, que, según la tradición, la persona a la que le sale en su pedazo debe pagar el roscón.</p>
+
+            <h2>Una tradición distinta en el calendario navideño</h2>
+            <p>Esta fiesta es muy diferente a la Navidad tradicional de Estados Unidos, donde Santa Claus llega la noche del 24 de diciembre por la chimenea y los regalos se abren la mañana del 25. En España y en muchos países de habla hispana, el centro de la magia navideña ocurre en enero, uniendo a la comunidad en las calles y celebrando el final de las fiestas con un toque de historia y comida tradicional.</p>
+
+            <button class="boton" onclick="iniciarJuego()">Poner a prueba mi comprensión</button>
+        </div>
+
+        <div id="juego-seccion">
+            <h2>Día de Reyes</h2>
+
+            <div class="barra-progreso">
+                <div class="progreso-relleno" id="progreso-relleno">PROGRESO: 0%</div>
+            </div>
+
+            <div id="nivel-contenedor">
+                </div>
+
+            <div id="pantalla-final-juego">
+                <h2>¡Misión Cumplida! 🎉</h2>
+                <p class="mensaje-centrado">¡Felicidades! Has completado la actividad <strong>Día de Reyes</strong>.</p>
+                <button class="boton" id="boton-vocabulario" onclick="iniciarVocabulario()">Actividad de vocabulario</button>
+            </div>
+        </div>
+        
+        <div id="vocabulario-seccion">
+            <h2>Actividad de Vocabulario: Unir Conceptos</h2>
+            <p style="text-align:center;"><strong>Instrucción:</strong> Selecciona una palabra de la izquierda y luego su definición correcta de la derecha.</p>
+
+            <div id="vocabulario-contenedor">
+                <div class="columna-palabras" id="columna-palabras">
+                    </div>
+                <div class="columna-definiciones" id="columna-definiciones">
+                    </div>
+            </div>
+
+            <div id="feedback-vocabulario" style="display: none;"></div>
+            
+            <div id="pantalla-final-vocabulario">
+                <h2>🌟 ¡Excelente trabajo!</h2>
+                <p class="mensaje-centrado">Has completado la actividad de vocabulario sobre La noche de los Reyes Magos.</p>
+                <button class="boton" id="iniciar-burbujas-btn" onclick="iniciarJuegoBurbujas()">¡A jugar! Explotando burbujas</button>
+            </div>
+        </div>
+        
+        <div id="juego-burbujas-seccion">
+            <h2>Explotando Burbujas</h2>
+            <p style="text-align:center; margin-bottom: 15px;">¡Sé rápido! Haz clic en Verdadero o Falso antes de que la burbuja se caiga.</p>
+
+            <div id="barra-info-burbujas">
+                <div class="medidor">Puntuación: <span id="puntuacion-burbujas">0</span></div>
+                <div class="medidor">Vidas: <span id="vidas-burbujas">❤️❤️❤️</span></div>
+                <div class="medidor">Combo: <span id="combo-burbujas">0</span>x</div>
+            </div>
+
+            <div id="area-juego-burbujas">
+                <div id="combo-display"></div>
+                <div id="retroalimentacion-vf"></div>
+                
+                <div id="burbuja-activa" class="burbuja" style="left: 30%;">La afirmación va aquí.</div>
+
+                <div id="control-burbuja">
+                    <div id="controles-vf">
+                        <button class="boton-vf" id="btn-verdadero" onclick="responderBurbuja(true)">VERDADERO</button>
+                        <button class="boton-vf" id="btn-falso" onclick="responderBurbuja(false)">FALSO</button>
+                    </div>
+                </div>
+
+                <div id="pantalla-final-burbujas">
+                    <h2 id="titulo-final-burbujas">¡Fin del Juego! 🏆</h2>
+                    <p>Has completado el juego de Verdadero/Falso sobre La noche de los Reyes Magos.</p>
+                    <p>Tu puntuación final es:</p>
+                    <div class="puntuacion-final" id="puntuacion-final-burbujas">0</div>
+                    <button class="boton" onclick="iniciarJuegoBurbujas()">Volver a empezar</button>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        /*
+        ========================================
+        JAVASCRIPT: LÓGICA DEL JUEGO DE COMPRENSIÓN (DÍA DE REYES)
+        ========================================
+        */
+
+        // 1. ESTRUCTURA DE DATOS: PREGUNTAS DEL JUEGO (Adaptadas a La noche de los Reyes Magos)
+        const niveles = [
+            {
+                nombre: "La Víspera y la Cabalgata",
+                preguntas: [
+                    {
+                        pregunta: "¿Qué fecha se celebra la víspera del Día de Reyes en España?",
+                        opciones: ["El 24 de diciembre", "El cinco de enero", "El seis de enero", "El 31 de diciembre"],
+                        respuestaCorrecta: 1
+                    },
+                    {
+                        pregunta: "¿Qué lanzan los Reyes y sus pajes desde las carrozas durante la cabalgata?",
+                        opciones: ["Flores y confeti", "Miles de caramelos", "Regalos envueltos", "Frutas cristalizadas"],
+                        respuestaCorrecta: 1
+                    }
+                ]
+            },
+            {
+                nombre: "Los Zapatos y los Regalos",
+                preguntas: [
+                    {
+                        pregunta: "¿Qué dejan los niños cerca del árbol o del balcón antes de dormir?",
+                        opciones: ["Sus calcetines de lana", "Sus zapatos limpios, agua y un poco de comida", "Una carta con sus deseos", "El Roscón de Reyes"],
+                        respuestaCorrecta: 1
+                    },
+                    {
+                        pregunta: "¿Cuándo abren los niños los regalos que les dejaron los Reyes Magos?",
+                        opciones: ["La noche del cinco de enero al acostarse", "Al despertar temprano el seis de enero", "La mañana del 25 de diciembre", "Durante la tarde de la cabalgata"],
+                        respuestaCorrecta: 1
+                    }
+                ]
+            },
+            {
+                nombre: "El Roscón de Reyes",
+                preguntas: [
+                    {
+                        pregunta: "¿Qué pasa si una persona encuentra la pequeña figura en su trozo de roscón?",
+                        opciones: ["Debe pagar el roscón", "Es coronada como el 'rey' o la 'reina' de la fiesta", "Tiene que limpiar los zapatos", "Recibe un caramelo extra"],
+                        respuestaCorrecta: 1
+                    },
+                    {
+                        pregunta: "¿Qué debe hacer la persona a la que le sale 'el haba' en su pedazo de roscón?",
+                        opciones: ["Llevar la corona de cartón", "Pagar el roscón", "Cantar un villancico", "Dar de comer a los camellos"],
+                        respuestaCorrecta: 1
+                    }
+                ]
+            },
+            {
+                nombre: "Comparación Cultural",
+                preguntas: [
+                    {
+                        pregunta: "¿Cómo llega Santa Claus en la Navidad tradicional de Estados Unidos, según el texto?",
+                        opciones: ["En una carroza repartiendo caramelos", "La noche del 24 de diciembre por la chimenea", "La mañana del seis de enero por el balcón", "Acompañado de pajes y camellos"],
+                        respuestaCorrecta: 1
+                    },
+                    {
+                        pregunta: "¿Dónde ocurre el centro de la magia navideña en España y en muchos países de habla hispana?",
+                        opciones: ["En diciembre, antes de la Nochebuena", "En enero, uniendo a la comunidad en las calles al final de las fiestas", "Solamente dentro de las casas en familia", "A principios de noviembre"],
+                        respuestaCorrecta: 1
+                    }
+                ]
+            }
+        ];
+
+        // 2. VARIABLES DE ESTADO DEL JUEGO
+        let nivelActual = 0;
+        let preguntasRespondidasCorrectamenteEnNivel = 0;
+        const totalNiveles = niveles.length;
+        const famaPorNivel = 100 / totalNiveles;
+
+        // 3. REFERENCIAS DEL DOM (HTML Elements)
+        const lecturaSeccion = document.getElementById('lectura-seccion');
+        const juegoSeccion = document.getElementById('juego-seccion');
+        const nivelContenedor = document.getElementById('nivel-contenedor');
+        const progresoRelleno = document.getElementById('progreso-relleno');
+        const pantallaFinalJuego = document.getElementById('pantalla-final-juego');
+
+        /**
+         * Oculta la sección de lectura y muestra e inicia la sección del juego.
+         */
+        function iniciarJuego() {
+            lecturaSeccion.style.display = 'none';
+            juegoSeccion.style.display = 'block';
+            cargarNivel();
+        }
+
+        /**
+         * Muestra las preguntas del nivel actual.
+         */
+        function cargarNivel() {
+            if (nivelActual >= totalNiveles) {
+                mostrarPantallaFinalJuego();
+                return;
+            }
+
+            nivelContenedor.style.opacity = '0';
+            setTimeout(() => {
+                nivelContenedor.innerHTML = '';
+                preguntasRespondidasCorrectamenteEnNivel = 0;
+
+                const nivel = niveles[nivelActual];
+                let nivelHTML = `<h2>Nivel ${nivelActual + 1}: ${nivel.nombre}</h2>`;
+
+                nivel.preguntas.forEach((preguntaData, indexPregunta) => {
+                    nivelHTML += `
+                        <div class="pregunta-card" data-pregunta-index="${indexPregunta}">
+                            <h3>Pregunta ${indexPregunta + 1}: ${preguntaData.pregunta}</h3>
+                    `;
+                    
+                    preguntaData.opciones.forEach((opcion, indexOpcion) => {
+                        nivelHTML += `
+                            <button 
+                                class="opcion-respuesta" 
+                                onclick="verificarRespuesta(${indexPregunta}, ${indexOpcion}, this)"
+                                data-opcion-index="${indexOpcion}"
+                            >
+                                ${opcion}
+                            </button>
+                        `;
+                    });
+
+                    nivelHTML += `
+                            <div class="feedback" id="feedback-${indexPregunta}"></div>
+                        </div>
+                    `;
+                });
+
+                nivelHTML += `
+                    <button class="boton-siguiente-nivel" id="siguiente-nivel-btn" onclick="siguienteNivel()">
+                        ¡Hecho! Continuar al siguiente nivel
+                    </button>
+                `;
+
+                nivelContenedor.innerHTML = nivelHTML;
+                nivelContenedor.style.opacity = '1';
+            }, 500);
+        }
+
+        /**
+         * Verifica si la opción seleccionada es correcta.
+         * LÓGICA CLAVE: Solo permite avanzar si TODAS las preguntas del nivel han sido respondidas correctamente.
+         */
+        function verificarRespuesta(indexPregunta, indexOpcion, boton) {
+            const pregunta = niveles[nivelActual].preguntas[indexPregunta];
+            const esCorrecta = indexOpcion === pregunta.respuestaCorrecta;
+            const feedbackElement = document.getElementById(`feedback-${indexPregunta}`);
+            const preguntaCard = boton.closest('.pregunta-card');
+            
+            if (preguntaCard.getAttribute('data-respondida') === 'true') return;
+
+            preguntaCard.querySelectorAll('.opcion-respuesta').forEach(b => b.classList.add('disabled'));
+
+            if (esCorrecta) {
+                boton.classList.add('correcta');
+                feedbackElement.className = 'feedback correcto';
+                feedbackElement.innerHTML = '✅ Correcto. ¡Excelente!';
+                feedbackElement.style.display = 'block';
+
+                preguntaCard.setAttribute('data-respondida', 'true');
+                preguntasRespondidasCorrectamenteEnNivel++;
+
+                if (preguntasRespondidasCorrectamenteEnNivel === niveles[nivelActual].preguntas.length) {
+                    document.getElementById('siguiente-nivel-btn').style.display = 'block';
+                    actualizarProgreso();
+                }
+
+            } else {
+                boton.classList.add('incorrecta');
+                feedbackElement.className = 'feedback incorrecto';
+                feedbackElement.innerHTML = '❌ Incorrecto. Vuelve a leer el texto y ¡Intenta otra vez!';
+                feedbackElement.style.display = 'block';
+                
+                preguntaCard.querySelectorAll('.opcion-respuesta').forEach(b => {
+                    if (b !== boton) {
+                         b.classList.remove('disabled');
+                    }
+                });
+                
+                setTimeout(() => {
+                    boton.classList.remove('incorrecta');
+                    preguntaCard.querySelectorAll('.opcion-respuesta').forEach(b => b.classList.remove('disabled'));
+                    feedbackElement.style.display = 'none';
+                }, 1500);
+            }
+        }
+
+
+        /**
+         * Avanza al siguiente nivel del juego.
+         */
+        function siguienteNivel() {
+            nivelActual++;
+            document.getElementById('siguiente-nivel-btn').style.display = 'none';
+            cargarNivel();
+        }
+
+        /**
+         * Actualiza la barra de progreso.
+         */
+        function actualizarProgreso() {
+            const progreso = nivelActual * famaPorNivel;
+            progresoRelleno.style.width = `${progreso + famaPorNivel}%`;
+            progresoRelleno.textContent = `PROGRESO: ${Math.round(progreso + famaPorNivel)}%`;
+        }
+
+        /**
+         * Muestra la pantalla final del juego de comprensión.
+         */
+        function mostrarPantallaFinalJuego() {
+            nivelContenedor.style.display = 'none';
+            pantallaFinalJuego.style.display = 'block';
+        }
+
+
+        /*
+        ========================================
+        JAVASCRIPT: LÓGICA DEL VOCABULARIO
+        ========================================
+        */
+        
+        // 4. ESTRUCTURA DE DATOS: VOCABULARIO (Adaptado a La noche de los Reyes Magos)
+        const vocabularioData = [
+            { palabra: "Los pajes", definicion: "Los ayudantes de los Reyes Magos que los acompañan y lanzan caramelos en el desfile.", id: 0 },
+            { palabra: "Los caramelos", definicion: "Dulces pequeños envueltos en papel.", id: 1 },
+            { palabra: "La cabalgata", definicion: "Desfile con carrozas y los reyes magos con sus pajes.", id: 2 },
+            { palabra: "El haba", definicion: "Semilla seca que va dentro del roscón.", id: 3 },
+            { palabra: "La víspera", definicion: "El día anterior a un día importante.", id: 4 }
+        ];
+
+        // 5. VARIABLES DE ESTADO DEL VOCABULARIO
+        let palabraSeleccionada = null;
+        let paresCorrectos = 0;
+        const totalPares = vocabularioData.length;
+
+        const vocabularioSeccion = document.getElementById('vocabulario-seccion');
+        const columnaPalabras = document.getElementById('columna-palabras');
+        const columnaDefiniciones = document.getElementById('columna-definiciones');
+        const pantallaFinalVocabulario = document.getElementById('pantalla-final-vocabulario');
+        const feedbackVocabulario = document.getElementById('feedback-vocabulario');
+        
+        function varColor(variable) {
+            return getComputedStyle(document.documentElement).getPropertyValue(variable) || variable;
+        }
+
+
+        /**
+         * Oculta la sección del juego y muestra la de vocabulario.
+         */
+        function iniciarVocabulario() {
+            juegoSeccion.style.display = 'none';
+            vocabularioSeccion.style.display = 'block';
+            cargarVocabulario();
+        }
+
+        /**
+         * Carga y mezcla las palabras y definiciones.
+         */
+        function cargarVocabulario() {
+            columnaPalabras.innerHTML = '';
+            columnaDefiniciones.innerHTML = '';
+            paresCorrectos = 0;
+            
+            const palabras = vocabularioData.map(item => ({ id: item.id, texto: item.palabra }));
+            const definiciones = vocabularioData.map(item => ({ id: item.id, texto: item.definicion }));
+
+            definiciones.sort(() => Math.random() - 0.5); 
+
+            palabras.forEach(p => {
+                const item = document.createElement('div');
+                item.className = 'item-vocabulario palabra';
+                item.textContent = p.texto;
+                item.dataset.matchId = p.id;
+                item.onclick = () => seleccionarPalabra(item);
+                columnaPalabras.appendChild(item);
+            });
+
+            definiciones.forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'item-vocabulario definicion';
+                item.textContent = d.texto;
+                item.dataset.matchId = d.id;
+                item.onclick = () => seleccionarDefinicion(item);
+                columnaDefiniciones.appendChild(item);
+            });
+        }
+
+        /**
+         * Maneja la selección de un elemento Palabra.
+         */
+        function seleccionarPalabra(palabra) {
+            if (palabra.classList.contains('match-correcto')) return;
+
+            if (palabraSeleccionada) {
+                palabraSeleccionada.classList.remove('seleccionado');
+            }
+
+            palabraSeleccionada = palabra;
+            palabraSeleccionada.classList.add('seleccionado');
+            
+            feedbackVocabulario.style.display = 'none';
+        }
+
+        /**
+         * Maneja la selección de un elemento Definición e intenta hacer match.
+         */
+        function seleccionarDefinicion(definicion) {
+            if (definicion.classList.contains('match-correcto')) return;
+            
+            if (!palabraSeleccionada) {
+                mostrarFeedbackVocabulario('Primero selecciona una <strong>palabra</strong> de la columna izquierda.', false);
+                return;
+            }
+
+            const idPalabra = parseInt(palabraSeleccionada.dataset.matchId);
+            const idDefinicion = parseInt(definicion.dataset.matchId);
+
+            if (idPalabra === idDefinicion) {
+                palabraSeleccionada.classList.remove('seleccionado');
+                palabraSeleccionada.classList.add('match-correcto');
+                definicion.classList.add('match-correcto');
+                
+                paresCorrectos++;
+                palabraSeleccionada = null;
+                
+                mostrarFeedbackVocabulario('✅ ¡Par correcto! Sigue uniendo los conceptos.', true);
+
+                if (paresCorrectos === totalPares) {
+                    setTimeout(mostrarPantallaFinalVocabulario, 1000);
+                }
+
+            } else {
+                palabraSeleccionada.classList.remove('seleccionado');
+                palabraSeleccionada = null;
+                mostrarFeedbackVocabulario('❌ Par incorrecto. Intenta de nuevo con otras opciones.', false);
+            }
+        }
+        
+        /**
+         * Muestra el feedback de la actividad de vocabulario.
+         */
+        function mostrarFeedbackVocabulario(mensaje, esCorrecto) {
+            feedbackVocabulario.style.display = 'block';
+            feedbackVocabulario.innerHTML = mensaje.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            
+            if (esCorrecto) {
+                feedbackVocabulario.style.backgroundColor = '#D3F3E3'; 
+                feedbackVocabulario.style.color = varColor('--color-texto');
+                feedbackVocabulario.style.border = `2px solid ${varColor('--color-texto')}`;
+            } else {
+                feedbackVocabulario.style.backgroundColor = '#FEE7F2';
+                feedbackVocabulario.style.color = varColor('--color-titulo');
+                feedbackVocabulario.style.border = `2px solid ${varColor('--color-titulo')}`;
+            }
+        }
+
+        /**
+         * Muestra la pantalla final del vocabulario.
+         */
+        function mostrarPantallaFinalVocabulario() {
+            document.getElementById('vocabulario-contenedor').style.display = 'none';
+            feedbackVocabulario.style.display = 'none';
+            pantallaFinalVocabulario.style.display = 'block';
+        }
+
+
+        /*
+        ========================================
+        JAVASCRIPT: LÓGICA DEL JUEGO VERDADERO/FALSO (BURBUJAS)
+        ========================================
+        */
+
+        // 6. ESTRUCTURA DE DATOS: AFIRMACIONES V/F (Usando la lista proporcionada)
+        const afirmacionesBurbujas = [
+            {
+                texto: "Los tres Reyes Magos se llaman Melchor, Gaspar y Baltasar.",
+                respuesta: true,
+                feedback: "Verdadero. Los niños esperan con ilusión la llegada de Melchor, Gaspar y Baltasar."
+            },
+            {
+                texto: "Los jóvenes usan ropa ligera como camisetas porque enero es un mes muy caluroso en España.",
+                respuesta: false,
+                feedback: "Falso. Los jóvenes llevan abrigos, bufandas y gorros porque enero es un mes muy frío."
+            },
+            {
+                texto: "Los niños dejan sus zapatos sucios cerca de la puerta principal de la casa.",
+                respuesta: false,
+                feedback: "Falso. Los niños limpian sus zapatos y los dejan cerca del árbol o del balcón."
+            },
+            {
+                texto: "Los niños ponen agua y comida para los camellos y los Reyes Magos antes de dormir.",
+                respuesta: true,
+                feedback: "Verdadero. Al lado de los zapatos ponen agua y un poco de comida para los camellos y los Reyes Magos."
+            },
+            {
+                texto: "El Roscón de Reyes es un pan salado en forma de estrella.",
+                respuesta: false,
+                feedback: "Falso. Es un pan dulce en forma de círculo decorado con frutas cristalizadas."
+            },
+            {
+                texto: "La persona que encuentra \"el haba\" en su pedazo de roscón tiene que pagar el roscón.",
+                respuesta: true,
+                feedback: "Verdadero. Según la tradición, la persona a la que le sale el haba debe pagar el roscón."
+            },
+            {
+                texto: "En la Navidad tradicional de Estados Unidos, Santa Claus llega la noche del 24 de diciembre por la chimenea.",
+                respuesta: true,
+                feedback: "Verdadero. En Estados Unidos Santa Claus llega la noche del 24 de diciembre por la chimenea y los regalos se abren la mañana del 25."
+            },
+            {
+                texto: "En España y muchos países hispanos, esta celebración une a la comunidad en las calles al final de las fiestas.",
+                respuesta: true,
+                feedback: "Verdadero. En enero une a la comunidad en las calles y celebra el final de las fiestas."
+            }
+        ];
+
+        // 7. VARIABLES DE ESTADO DEL JUEGO BURBUJAS
+        let puntuacion = 0;
+        let vidas = 3;
+        let combo = 0;
+        let afirmacionActualIndex = 0;
+        let juegoActivo = false;
+        let temporizadorBurbuja;
+        
+        // 8. REFERENCIAS DEL DOM PARA BURBUJAS
+        const juegoBurbujasSeccion = document.getElementById('juego-burbujas-seccion');
+        const burbujaActiva = document.getElementById('burbuja-activa');
+        const puntuacionDisplay = document.getElementById('puntuacion-burbujas');
+        const vidasDisplay = document.getElementById('vidas-burbujas');
+        const comboDisplay = document.getElementById('combo-burbujas');
+        const comboAnimacion = document.getElementById('combo-display');
+        const retroalimentacionVF = document.getElementById('retroalimentacion-vf');
+        const pantallaFinalBurbujas = document.getElementById('pantalla-final-burbujas');
+        const puntuacionFinalBurbujas = document.getElementById('puntuacion-final-burbujas');
+        const tituloFinalBurbujas = document.getElementById('titulo-final-burbujas');
+        const areaJuegoBurbujas = document.getElementById('area-juego-burbujas');
+
+        /**
+         * Inicia el juego de burbujas.
+         */
+        function iniciarJuegoBurbujas() {
+            vocabularioSeccion.style.display = 'none';
+            juegoBurbujasSeccion.style.display = 'block';
+            juegoActivo = true;
+            reiniciarValoresBurbujas();
+            mostrarNuevaBurbuja();
+        }
+        
+        /**
+         * Reinicia los valores de vidas y puntuación para las burbujas.
+         */
+        function reiniciarValoresBurbujas() {
+            puntuacion = 0;
+            vidas = 3;
+            combo = 0;
+            afirmacionesBurbujas.sort(() => Math.random() - 0.5); 
+            afirmacionActualIndex = 0;
+            actualizarDisplayBurbujas();
+            pantallaFinalBurbujas.style.display = 'none';
+        }
+
+        /**
+         * Actualiza el contador de puntos, vidas y combo.
+         */
+        function actualizarDisplayBurbujas() {
+            puntuacionDisplay.textContent = puntuacion;
+            vidasDisplay.textContent = '❤️'.repeat(vidas);
+            comboDisplay.textContent = combo;
+        }
+        
+        /**
+         * Muestra la siguiente burbuja.
+         */
+        function mostrarNuevaBurbuja() {
+            if (!juegoActivo) return;
+
+            if (afirmacionActualIndex >= afirmacionesBurbujas.length) {
+                afirmacionesBurbujas.sort(() => Math.random() - 0.5);
+                afirmacionActualIndex = 0;
+            }
+
+            const afirmacion = afirmacionesBurbujas[afirmacionActualIndex];
+            burbujaActiva.textContent = afirmacion.texto;
+            burbujaActiva.dataset.respuestaCorrecta = afirmacion.respuesta;
+            burbujaActiva.dataset.feedback = afirmacion.feedback;
+
+            burbujaActiva.style.animation = 'none';
+            burbujaActiva.offsetHeight; 
+            burbujaActiva.style.top = `${areaJuegoBurbujas.offsetHeight}px`; 
+            burbujaActiva.style.display = 'block';
+            burbujaActiva.classList.remove('explotando');
+
+            const randomLeft = Math.floor(Math.random() * 50) + 20; 
+            burbujaActiva.style.left = `${randomLeft}%`;
+
+            const duracionAnimacion = 6 + (Math.random() * 2);
+            burbujaActiva.style.animation = `flotar ${duracionAnimacion}s linear forwards`;
+            
+            clearTimeout(temporizadorBurbuja);
+            temporizadorBurbuja = setTimeout(() => {
+                perderVida("¡Tiempo agotado! La afirmación cayó al vacío.");
+            }, duracionAnimacion * 1000);
+            
+            afirmacionActualIndex++;
+        }
+
+        /**
+         * Maneja la respuesta del usuario.
+         */
+        function responderBurbuja(respuestaUsuario) {
+            if (!juegoActivo) return;
+
+            clearTimeout(temporizadorBurbuja);
+            const respuestaCorrecta = burbujaActiva.dataset.respuestaCorrecta === 'true';
+
+            if (respuestaUsuario === respuestaCorrecta) {
+                puntuacion += 10;
+                combo++;
+                
+                if (combo >= 3) {
+                    puntuacion += combo * 5;
+                    mostrarComboAnimacion(combo);
+                }
+                
+                burbujaActiva.style.animation = 'none';
+                burbujaActiva.classList.add('explotando');
+                
+                mostrarFeedbackVF('✅ ¡Correcto!', 1000);
+                
+                setTimeout(() => {
+                    mostrarNuevaBurbuja();
+                }, 400);
+                
+            } else {
+                combo = 0;
+                perderVida(burbujaActiva.dataset.feedback);
+            }
+
+            actualizarDisplayBurbujas();
+        }
+
+        /**
+         * Reduce la vida y maneja el fin del juego por vidas.
+         */
+        function perderVida(mensajeFeedback) {
+            vidas--;
+            combo = 0;
+            
+            mostrarFeedbackVF(`❌ ${mensajeFeedback}`, 3000); 
+            
+            if (vidas <= 0) {
+                juegoActivo = false;
+                terminarJuegoBurbujas();
+            } else {
+                burbujaActiva.style.animation = 'none';
+                burbujaActiva.classList.remove('explotando');
+                mostrarNuevaBurbuja();
+            }
+            actualizarDisplayBurbujas();
+        }
+        
+        /**
+         * Muestra la animación de combo.
+         */
+        function mostrarComboAnimacion(comboCount) {
+            comboAnimacion.textContent = `${comboCount} ¡COMBO! 🌟`;
+            comboAnimacion.style.display = 'block';
+            comboAnimacion.style.animation = 'none';
+            comboAnimacion.offsetHeight;
+            comboAnimacion.style.animation = 'comboPop 0.8s ease-out forwards';
+        }
+
+        /**
+         * Muestra un mensaje de retroalimentación temporal.
+         */
+        function mostrarFeedbackVF(mensaje, duracion) {
+            retroalimentacionVF.innerHTML = mensaje;
+            retroalimentacionVF.style.display = 'block';
+            
+            setTimeout(() => {
+                retroalimentacionVF.style.display = 'none';
+            }, duracion);
+        }
+
+        /**
+         * Finaliza el juego y muestra la pantalla de puntuación.
+         */
+        function terminarJuegoBurbujas() {
+            juegoActivo = false;
+            clearTimeout(temporizadorBurbuja);
+            burbujaActiva.style.display = 'none';
+            
+            puntuacionFinalBurbujas.textContent = puntuacion;
+            
+            if (puntuacion > 0) {
+                tituloFinalBurbujas.innerHTML = '¡Fin del Juego! 🏆';
+            } else {
+                tituloFinalBurbujas.innerHTML = '¡Fin del Juego!';
+            }
+
+            pantallaFinalBurbujas.style.display = 'flex';
+        }
+
+        // 9. FUNCIÓN DE INICIO AUTOMÁTICO
+        // Mantiene la sección de lectura visible al cargar.
+    </script>
+
+</body>
+</html>
